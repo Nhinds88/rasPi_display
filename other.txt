@@ -1,0 +1,15 @@
+title_text = article_title_get('https://www.npr.org/')
+
+w.create_text(800, y, text=article_title_get('https://www.npr.org/'))
+
+def article_title_get(url):
+    """
+    grabs the title on articles on NPR
+
+    """
+    raw_html = simple_get(url)
+    html = BeautifulSoup(raw_html, 'html.parser')
+    titles = [" "]
+    for i, h3 in enumerate(html.select('h3')):
+        titles.append(h3.text)
+    return titles
