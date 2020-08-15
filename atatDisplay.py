@@ -1,8 +1,8 @@
 import pygame
 import os
+import time
 from pygame.locals import *
 from requests import get
-from time import time
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
@@ -42,21 +42,12 @@ def log_error(e):
     """
     print(e)
 
-# def text_objects(text, font):
-#     textSurface = font.render(text, True, black)
-#     return textSurface, textSurface.get_rect()
-
-# def message_display(text):
-#     largeText = pygame.font.Font('freesansbold.ttf',115)
-#     TextSurf, TextRect = text_objects(text, largeText)
-#     TextRect.center = (800, y)
-#     raspiDisplay.blit(TextSurf, TextRect)
 
 pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
-raspiDisplay = pygame.display.set_mode((1280, 720))
+raspiDisplay = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('ATAT')
 
 current_path = os.path.dirname(__file__)
@@ -71,14 +62,14 @@ threshold_green = 255
 threshold_blue = 8
 
 for x in range(cockPit.get_width()):
-    for y in range(187, 405):
+    for y in range(100, 405):
         color = cockPit.get_at((x, y))
         if color.r >= 0 and color.r <= 150 and color.g >= 140 and color.g <= 255 and color.b >= 0 and color.b <= 150:
             for x2 in range(x-1, x+1):
                 for y2 in range(y-1, y+1):
                     cockPit.set_at((x2, y2), (0, 0, 0, 0))
 for x in range(cockPit.get_width()):
-    for y in range(187, 400):
+    for y in range(100, 400):
         color = cockPit.get_at((x, y))
         if color.r >= 0 and color.r <= 150 and color.g >= 80 and color.g <= 255 and color.b >= 0 and color.b <= 150:
             if color.r < 40 and color.b < 60:
@@ -91,7 +82,7 @@ pygame.display.update()
 
 gameExit = False
     
-y = 480
+y = 300
 black = (0,0,0)
 bg_y = 0
 
@@ -109,9 +100,28 @@ while not gameExit:
     for i, h3 in enumerate(html.select('h3')):
         nprTitles.append(h3.text)
 
-    if y == 200:
-        y = 480
+    localtime = time.localtime()
+    print ("Local current time :", localtime)
+
+    h = localtime.tm_hour
+    m = str(localtime.tm_min)
+    s = str(localtime.tm_sec)
+    
+    if localtime.tm_hour > 12:
+        h = h - 12
+
+    h = str(h)
+
+    if localtime.tm_hour < 10:
+        h = "0"+h
+
+    if localtime.tm_min < 10:
+        m = "0"+m
+
+    if y == 10:
+        y = 300
     font = pygame.font.SysFont('comicsansms', 16, bold=True)
+    fontTime = pygame.font.SysFont('comicsansms', 36, bold=True)
     text0 = font.render(nprTitles[0], True,
             pygame.Color(0,0,0))
     text1 = font.render(nprTitles[1], True,
@@ -122,16 +132,25 @@ while not gameExit:
             pygame.Color(0,0,0))
     text4 = font.render(nprTitles[4], True,
             pygame.Color(0,0,0))
-    raspiDisplay.blit(text0, (306,y))
-    raspiDisplay.blit(text1, (306,y+40))
-    raspiDisplay.blit(text2, (306,y+80))
-    raspiDisplay.blit(text3, (306,y+120))
-    raspiDisplay.blit(text4, (306,y+160))
+    hourText = fontTime.render(h, True,
+            pygame.Color(0,0,0))
+    minuteText = fontTime.render(m, True,
+            pygame.Color(0,0,0))
+    secondsText = fontTime.render(s, True,
+            pygame.Color(0,0,0))
+    raspiDisplay.blit(text0, (86,y))
+    raspiDisplay.blit(text1, (86,y+40))
+    raspiDisplay.blit(text2, (86,y+80))
+    raspiDisplay.blit(text3, (86,y+120))
+    raspiDisplay.blit(text4, (86,y+160))
+    raspiDisplay.blit(hourText, (10, 173))
+    raspiDisplay.blit(minuteText, (10, 232))
+    raspiDisplay.blit(secondsText, (10, 292))
     raspiDisplay.blit(cockPit, (0,0))
     pygame.display.flip()
 
     clock.tick(60)
-    y -= 1
+    y -= 2
 
     if bg_y == 0:
         bg_y += 1
