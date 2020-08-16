@@ -47,7 +47,7 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
-raspiDisplay = pygame.display.set_mode((800, 600))
+raspiDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption('ATAT')
 
 current_path = os.path.dirname(__file__)
@@ -101,7 +101,7 @@ while not gameExit:
         nprTitles.append(h3.text)
 
     localtime = time.localtime()
-    print ("Local current time :", localtime)
+    # print ("Local current time :", localtime)
 
     h = localtime.tm_hour
     m = str(localtime.tm_min)
@@ -150,13 +150,21 @@ while not gameExit:
     pygame.display.flip()
 
     clock.tick(60)
-    y -= 2
+    y -= 4
 
     if bg_y == 0:
         bg_y += 1
     if bg_y == 10:
         bg_y = 0
-	
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                quit()	
 
 pygame.quit()
 quit()
