@@ -101,7 +101,6 @@ while not gameExit:
         nprTitles.append(h3.text)
 
     localtime = time.localtime()
-    # print ("Local current time :", localtime)
 
     h = localtime.tm_hour
     m = str(localtime.tm_min)
@@ -120,7 +119,7 @@ while not gameExit:
 
     if y == 10:
         y = 300
-    font = pygame.font.SysFont('comicsansms', 16, bold=True)
+    font = pygame.font.SysFont('comicsansms', 24, bold=True)
     fontTime = pygame.font.SysFont('comicsansms', 36, bold=True)
     text0 = font.render(nprTitles[0], True,
             pygame.Color(0,0,0))
@@ -139,10 +138,10 @@ while not gameExit:
     secondsText = fontTime.render(s, True,
             pygame.Color(0,0,0))
     raspiDisplay.blit(text0, (86,y))
-    raspiDisplay.blit(text1, (86,y+40))
-    raspiDisplay.blit(text2, (86,y+80))
-    raspiDisplay.blit(text3, (86,y+120))
-    raspiDisplay.blit(text4, (86,y+160))
+    raspiDisplay.blit(text1, (86,y+60))
+    raspiDisplay.blit(text2, (86,y+120))
+    raspiDisplay.blit(text3, (86,y+220))
+    raspiDisplay.blit(text4, (86,y+280))
     raspiDisplay.blit(hourText, (10, 173))
     raspiDisplay.blit(minuteText, (10, 232))
     raspiDisplay.blit(secondsText, (10, 292))
