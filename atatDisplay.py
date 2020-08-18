@@ -47,7 +47,8 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
-raspiDisplay = pygame.display.set_mode((800, 600))
+# raspiDisplay = pygame.display.set_mode((800, 600))
+raspiDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption('ATAT')
 
 current_path = os.path.dirname(__file__)
@@ -84,9 +85,12 @@ gameExit = False
     
 y = 300
 black = (0,0,0)
-bg_y = 0
-yAddon = 0
+bg_y = -720
 countTitles = 0
+countWalkX = 0
+countWalkY = 0
+walkX = -760
+walk = walkX
 titleA = 0
 titleB = 1
 titleC = 2
@@ -95,14 +99,34 @@ titleE = 4
 titleF = 5
 titleG = 6
 
+# raspiDisplay.blit(bg, (walkX ,bg_y))
+
 while not gameExit:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
     raspiDisplay.fill((0,0,0))
-    raspiDisplay.blit(bg, (0,bg_y))
+    
+    if countWalkX < 40:
+        walk += 2
+    elif countWalkX > 40 and countWalkX < 70:
+        walk -= 2
+    elif countWalkX == 70:
+        countWalkX = 0
 
+    if countWalkY < 10:
+        bg_y += 2
+    elif countWalkY > 10 and countWalkY < 20:
+        bg_y -= 2
+    elif countWalkY == 20:
+        countWalkY = 0
+
+    raspiDisplay.blit(bg, (walk, bg_y))
+
+    countWalkX += 1
+    countWalkY += 1
+    
     nprTitles = []
     raw_html = simple_get('https://www.npr.org/')
     html = BeautifulSoup(raw_html, 'html.parser')
