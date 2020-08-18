@@ -47,7 +47,7 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
-raspiDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+raspiDisplay = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('ATAT')
 
 current_path = os.path.dirname(__file__)
@@ -85,6 +85,15 @@ gameExit = False
 y = 300
 black = (0,0,0)
 bg_y = 0
+yAddon = 0
+countTitles = 0
+titleA = 0
+titleB = 1
+titleC = 2
+titleD = 3
+titleE = 4
+titleF = 5
+titleG = 6
 
 while not gameExit:
 
@@ -98,7 +107,14 @@ while not gameExit:
     raw_html = simple_get('https://www.npr.org/')
     html = BeautifulSoup(raw_html, 'html.parser')
     for i, h3 in enumerate(html.select('h3')):
-        nprTitles.append(h3.text)
+        temp = str(h3.text)
+        if len(temp) > 40:
+           tempA = temp[:40] + "-"
+           tempB = temp[40:]
+           nprTitles.append(tempA)
+           nprTitles.append(tempB)
+        else:
+           nprTitles.append(temp)
 
     localtime = time.localtime()
 
@@ -117,36 +133,78 @@ while not gameExit:
     if localtime.tm_min < 10:
         m = "0"+m
 
-    if y == 10:
+    if y <= -60:
         y = 300
     font = pygame.font.SysFont('comicsansms', 24, bold=True)
     fontTime = pygame.font.SysFont('comicsansms', 36, bold=True)
-    text0 = font.render(nprTitles[0], True,
+
+    t0 = nprTitles[titleA]
+    t1 = nprTitles[titleB]
+    t2 = nprTitles[titleC]
+    t3 = nprTitles[titleD]
+    t4 = nprTitles[titleE]
+    t5 = nprTitles[titleF]
+    t6 = nprTitles[titleG]
+
+    text0 = font.render(t0, True,
             pygame.Color(0,0,0))
-    text1 = font.render(nprTitles[1], True,
+    text1 = font.render(t1, True,
             pygame.Color(0,0,0))
-    text2 = font.render(nprTitles[2], True,
+    text2 = font.render(t2, True,
             pygame.Color(0,0,0))
-    text3 = font.render(nprTitles[3], True,
+    text3 = font.render(t3, True,
             pygame.Color(0,0,0))
-    text4 = font.render(nprTitles[4], True,
+    text4 = font.render(t4, True,
             pygame.Color(0,0,0))
+    text5 = font.render(t5, True,
+            pygame.Color(0,0,0))
+    text6 = font.render(t6, True,
+            pygame.Color(0,0,0))
+
     hourText = fontTime.render(h, True,
             pygame.Color(0,0,0))
     minuteText = fontTime.render(m, True,
             pygame.Color(0,0,0))
     secondsText = fontTime.render(s, True,
             pygame.Color(0,0,0))
-    raspiDisplay.blit(text0, (86,y))
-    raspiDisplay.blit(text1, (86,y+60))
-    raspiDisplay.blit(text2, (86,y+120))
-    raspiDisplay.blit(text3, (86,y+220))
-    raspiDisplay.blit(text4, (86,y+280))
+
+    raspiDisplay.blit(text0, (186,y))
+    raspiDisplay.blit(text1, (186,y+60))
+    raspiDisplay.blit(text2, (186,y+120))
+    raspiDisplay.blit(text3, (186,y+180))
+    raspiDisplay.blit(text4, (186,y+240))
+    raspiDisplay.blit(text5, (186,y+300))
+    raspiDisplay.blit(text6, (186,y+360))
     raspiDisplay.blit(hourText, (10, 173))
     raspiDisplay.blit(minuteText, (10, 232))
     raspiDisplay.blit(secondsText, (10, 292))
     raspiDisplay.blit(cockPit, (0,0))
     pygame.display.flip()
+
+    countTitles += 1
+    
+
+    if countTitles == 90:
+        titleA += 7
+        titleB += 7
+        titleC += 7
+        titleD += 7
+        titleE += 7
+        titleF += 7
+        titleG += 7
+
+        if titleA > len(nprTitles) - 1 or titleB > len(nprTitles) - 1 or titleC > len(nprTitles) - 1 or titleD > len(nprTitles) - 1 or titleE > len(nprTitles) - 1 or titleF > len(nprTitles) - 1 or titleG > len(nprTitles) - 1:
+            titleA = 0
+            titleB = 1
+            titleC = 2
+            titleD = 3
+            titleE = 4
+            titleF = 5
+            titleG = 6
+
+        countTitles = 0
+        
+    
 
     clock.tick(60)
     y -= 4
